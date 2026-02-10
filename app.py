@@ -12,7 +12,7 @@ DATA_STATES = os.path.join("data", "states")
 
 os.makedirs(DATA_STATES, exist_ok=True)
 
-VIDEO_PATH = os.path.join(DATA_INPUT, "input.mp4")
+VIDEO_PATH = os.path.join(DATA_INPUT, "326677_small.mp4")
 FRAME_DIR = DATA_FRAMES
 OUTPUT_VIDEO = os.path.join(DATA_OUTPUTS, "output.mp4")
 
