@@ -21,9 +21,13 @@ extract_frames(VIDEO_PATH, FRAME_DIR)
 
 # Step 2: User input
 user_input = input("Describe the style you want (cinematic / fast / reel): ")
+fps_input = input("Optional FPS (press Enter to use default): ").strip()
+fps = int(fps_input) if fps_input else None
 
 # Step 3: Intent Understanding
 intent = interpret_intent(user_input)
+if fps is not None:
+    intent["fps"] = fps
 
 # Step 4: Frame Graph Traversal
 frames = build_frame_graph(FRAME_DIR)
@@ -34,7 +38,7 @@ regenerate_video(
     FRAME_DIR,
     frame_path,
     OUTPUT_VIDEO,
-    intent["fps"]
+    intent
 )
 
 # Step 6: Save Creative State
