@@ -1,12 +1,11 @@
 from typing import Optional
 import re
-import os
 
 
 def interpret_intent(user_input: str, defaults: Optional[dict] = None, use_llm: bool = False) -> dict:
     """Parse a free-text user intent into a structured dict of video requirements.
 
-    If `use_llm` is True and an LLM endpoint is configured via `LLM_API_URL`, this
+    If `use_llm` is True and Groq is configured via `GROQ_API_KEY`, this
     will attempt to request a richer intent from the remote service and fall back
     to local parsing on error.
     """
@@ -20,6 +19,10 @@ def interpret_intent(user_input: str, defaults: Optional[dict] = None, use_llm: 
         if request_intent_from_llm is not None:
             remote = request_intent_from_llm(user_input)
             if isinstance(remote, dict):
+                if defaults:
+                    merged = dict(defaults)
+                    merged.update(remote)
+                    remote = merged
                 if "explanation" not in remote:
                     remote["explanation"] = f"LLM-provided intent for: {user_input}"
                 return remote
