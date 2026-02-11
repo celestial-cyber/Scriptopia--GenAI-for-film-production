@@ -295,20 +295,22 @@ with groq_col1:
 with groq_col2:
     st.write("") # Spacer
     st.write("") # Spacer
-    if st.button("Consult AI", use_container_width=True):
-        if not user_prompt.strip():
-            st.warning("Please enter a query.")
+    consult_clicked = st.button("Consult AI", use_container_width=True)
+
+if consult_clicked:
+    if not user_prompt.strip():
+        st.warning("Please enter a query.")
+    else:
+        if not os.environ.get("GROQ_API_KEY"):
+            st.error("🚫 Missing Groq API Key.")
         else:
-            if not os.environ.get("GROQ_API_KEY"):
-                st.error("🚫 Missing Groq API Key. Please enter it in the sidebar.")
+            with st.spinner("Consulting the archives..."):
+                answer = request_text_from_llm(user_prompt.strip())
+            
+            if answer:
+                st.markdown("### 🎭 Scriptopia's Vision")
+                st.success(answer)
             else:
-                with st.spinner("Consulting the archives..."):
-                    answer = request_text_from_llm(user_prompt.strip())
-                
-                if answer:
-                    st.success("Scriptopia says:")
-                    st.markdown(f">{answer}")
-                else:
-                    st.error("No response from the oracle.")
+                st.error("No response from the oracle.")
 
 st.markdown("</div>", unsafe_allow_html=True)
